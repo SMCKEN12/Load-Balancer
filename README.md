@@ -41,8 +41,8 @@ A lightweight, software-based Layer 4 TCP load balancer built in C# using .NET. 
 ### 📦 1. Clone the Repository
 
 ```bash
-git clone https://github.com/your-username/TcpLoadBalancer.git
-cd TcpLoadBalancer
+git https://github.com/SMCKEN12/Load-Balancer.git
+cd Load-Balancer
 ```
 
 ### ⚙️ 2. Configure the Backend Servers
@@ -51,13 +51,20 @@ Open Program.cs and configure the backend servers your load balancer will forwar
 ### ▶️ 3. Run the Load Balancer
 From the project directory, run:
 ```bash
-dotnet run --project TcpLoadBalancer
+dotnet run
 ```
 
 ### 🔁 4. Connect a Client
-To test the connection you can simulate a client connection in another terminal using NetCat:
+To test the connection you can simulate a client connection in another terminal using NetCat, which can be downloaded here through NMap; https://nmap.org/download.html#windows
+Make sure to check the box for installing Ncat and add the install folder to your system path. Then run this command with a port matching the server settings that were set in step 2.
 ```bash
-nc 127.0.0.1 5000
+ncat -lk *port*
+```
+This will create a mock backend, waiting for incoming connections.
+
+Then open another command prompt and simulate a client with this command;
+```bash
+ncat *ip* *listening port*
 ```
 Type messages and see them forwarded to one of the backend servers.
 
