@@ -1,4 +1,4 @@
-﻿namespace Load_Balancer.Interfaces;
+﻿namespace LoadBalancer.Interfaces;
 
 public interface ITcpLoadBalancer
 {

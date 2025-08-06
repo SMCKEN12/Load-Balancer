@@ -1,8 +1,8 @@
-﻿using Load_Balancer.Interfaces;
-using Load_Balancer.Models;
+﻿using LoadBalancer.Interfaces;
+using LoadBalancer.Models;
 using System.Net.Sockets;
 
-namespace Load_Balancer.Services;
+namespace LoadBalancer.Services;
 
 public class TcpConnectionHandler : ITcpConnectionHandler
 {
@@ -12,9 +12,9 @@ public class TcpConnectionHandler : ITcpConnectionHandler
     public async Task HandleAsync(TcpClient client, BackendServer backend)
     {
         using var server = new TcpClient();
-        bool connected = false;
+        var connected = false;
 
-        for (int attempt = 1; attempt <= MaxRetries; attempt++)
+        for (var attempt = 1; attempt <= MaxRetries; attempt++)
         {
             try
             {
@@ -24,7 +24,7 @@ public class TcpConnectionHandler : ITcpConnectionHandler
             }
             catch
             {
-                int delay = InitialDelayMs * (int)Math.Pow(2, attempt - 1);
+                var delay = InitialDelayMs * (int)Math.Pow(2, attempt - 1);
                 await Task.Delay(delay);
             }
         }

@@ -1,8 +1,8 @@
-﻿using Load_Balancer.Interfaces;
-using Load_Balancer.Models;
-using Load_Balancer.Services;
+﻿using LoadBalancer.Interfaces;
+using LoadBalancer.Models;
+using LoadBalancer.Services;
 
-namespace Load_Balancer
+namespace LoadBalancer
 {
     internal class Program
     {
