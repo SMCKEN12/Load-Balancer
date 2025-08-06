@@ -1,8 +1,8 @@
-﻿using Load_Balancer.Interfaces;
-using System.Net;
+﻿using LoadBalancer.Interfaces;
 using System.Net.Sockets;
+using System.Net;
 
-namespace Load_Balancer.Services;
+namespace LoadBalancer.Services;
 
 public class TcpLoadBalancer : ITcpLoadBalancer
 {

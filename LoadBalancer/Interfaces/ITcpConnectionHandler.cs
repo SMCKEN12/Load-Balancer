@@ -1,7 +1,7 @@
-﻿using Load_Balancer.Models;
+﻿using LoadBalancer.Models;
 using System.Net.Sockets;
 
-namespace Load_Balancer.Interfaces;
+namespace LoadBalancer.Interfaces;
 
 public interface ITcpConnectionHandler
 {

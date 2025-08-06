@@ -1,8 +1,8 @@
-﻿using Load_Balancer.Interfaces;
-using Load_Balancer.Models;
+﻿using LoadBalancer.Interfaces;
+using LoadBalancer.Models;
 using System.Net.Sockets;
 
-namespace Load_Balancer.Services;
+namespace LoadBalancer.Services;
 
 public class TcpHealthChecker : ITcpHealthChecker
 {

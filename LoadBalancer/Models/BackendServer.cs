@@ -1,4 +1,4 @@
-﻿namespace Load_Balancer.Models;
+﻿namespace LoadBalancer.Models;
 
 public class BackendServer
 {

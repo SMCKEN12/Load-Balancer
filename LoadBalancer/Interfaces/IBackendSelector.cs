@@ -1,6 +1,6 @@
-﻿using Load_Balancer.Models;
+﻿using LoadBalancer.Models;
 
-namespace Load_Balancer.Interfaces;
+namespace LoadBalancer.Interfaces;
 
 public interface IBackendSelector
 {
