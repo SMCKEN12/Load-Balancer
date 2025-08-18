@@ -29,7 +29,8 @@ public class TcpLoadBalancerShould
             port,
             backendSelector,
             healthChecker,
-            connectionHandler
+            connectionHandler,
+            default
         );
 
         _ = Task.Run(async () =>
@@ -66,7 +67,8 @@ public class TcpLoadBalancerShould
             port,
             backendSelector,
             healthChecker,
-            connectionHandler
+            connectionHandler,
+            default
         );
 
         var clientConnected = new TaskCompletionSource<TcpClient>();

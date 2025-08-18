@@ -15,7 +15,7 @@ public class TcpLoadBalancer : ITcpLoadBalancer
         int listenPort,
         IBackendSelector backendSelector,
         ITcpHealthChecker healthChecker,
-        ITcpConnectionHandler connectionHandler)
+        ITcpConnectionHandler connectionHandler, CancellationToken cancellationToken)
     {
         _listener = new TcpListener(IPAddress.Any, listenPort);
         _backendSelector = backendSelector;
@@ -28,19 +28,33 @@ public class TcpLoadBalancer : ITcpLoadBalancer
         _listener.Start();
         _ = _healthChecker.StartAsync();
 
-        int count = 0;
-        while (count++ < maxConnections)
+        using var semaphore = new SemaphoreSlim(maxConnections);
+
+        while (true)
         {
             var client = await _listener.AcceptTcpClientAsync();
-            var backend = _backendSelector.GetNextBackend();
 
+            await semaphore.WaitAsync();
+
+            var backend = _backendSelector.GetNextBackend();
             if (backend == null)
             {
                 client.Close();
+                semaphore.Release();
                 continue;
             }
 
-            _ = Task.Run(() => _connectionHandler.HandleAsync(client, backend));
+            _ = Task.Run(async () =>
+            {
+                try
+                {
+                    await _connectionHandler.HandleAsync(client, backend);
+                }
+                finally
+                {
+                    semaphore.Release();
+                }
+            });
         }
     }
 }

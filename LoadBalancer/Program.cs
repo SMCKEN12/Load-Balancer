@@ -1,4 +1,5 @@
-﻿using LoadBalancer.Interfaces;
+﻿using Microsoft.Extensions.Configuration;
+using LoadBalancer.Interfaces;
 using LoadBalancer.Models;
 using LoadBalancer.Services;
 
@@ -17,22 +18,27 @@ namespace LoadBalancer
                 cts.Cancel();
             };
 
-            var backendServers = new List<BackendServer>
-            {
-                new BackendServer { Ip = "127.0.0.1", Port = 9001 },
-                new BackendServer { Ip = "127.0.0.1", Port = 9002 },
-                new BackendServer { Ip = "127.0.0.1", Port = 9003 }
-            };
+            var configuration = new ConfigurationBuilder()
+                .SetBasePath(Directory.GetCurrentDirectory())
+                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+                .Build();
+
+            var lbConfig = configuration.GetSection("LoadBalancer").Get<LoadBalancerConfig>();
+
+            var backendServers = lbConfig.Backends
+                .Select(b => new BackendServer { Ip = b.Ip, Port = b.Port })
+                .ToList();
 
             IBackendSelector backendSelector = new BackendSelector(backendServers);
-            ITcpHealthChecker healthChecker = new TcpHealthChecker(backendServers, TimeSpan.FromSeconds(5), cts.Token);
+            ITcpHealthChecker healthChecker = new TcpHealthChecker(backendServers, TimeSpan.FromSeconds(lbConfig.HealthCheckIntervalSeconds), cts.Token);
             ITcpConnectionHandler connectionHandler = new TcpConnectionHandler();
 
             ITcpLoadBalancer loadBalancer = new TcpLoadBalancer(
-                listenPort: 8080,
+                listenPort: lbConfig.ListenPort,
                 backendSelector: backendSelector,
                 healthChecker: healthChecker,
-                connectionHandler: connectionHandler
+                connectionHandler: connectionHandler,
+                cts.Token
             );
 
             Console.WriteLine("Starting TCP Load Balancer on port 8080...");
